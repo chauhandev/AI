@@ -30,7 +30,7 @@ app.get("/search", async (req, res) => {
       return jsonEntry.response.trim();
     }).join(" ");
 
-    res.json({ data: parsedData });
+    res.json({ results: parsedData });
   } catch (error) {
     console.error("Error interacting with Ollama:", error.message);
     

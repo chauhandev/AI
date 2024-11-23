@@ -5,157 +5,238 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Coder'sBuddy</title>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+            color: #ffffff;
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
-            min-height: 100vh;
-            margin: 0;
-            padding: 20px;
-            background-color: #f8f9fa;
+            padding: 40px 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .logo-container {
+            margin: 60px 0;
+            text-align: center;
         }
 
         .logo {
-            font-size: 3.5em;
-            margin-bottom: 20px;
-            font-weight: bold;
-            text-align: center;
-            line-height: 1.2;
-            position: relative;
-        }
-
-        .logo span.coders {
-            background: linear-gradient(45deg, #4285f4, #34a853, #fbbc05, #ea4335);
+            font-size: 4em;
+            font-weight: 800;
+            letter-spacing: -2px;
+            background: linear-gradient(135deg, #ffffff 0%, #a3a3a3 100%);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
-            display: inline-block;
+            margin-bottom: 20px;
+            position: relative;
         }
 
-        .logo span.buddy {
-            color: #4285f4;
-            font-style: italic;
-        }
-
-        .logo::after {
-            content: "{ }";
-            position: absolute;
-            font-size: 0.4em;
-            top: 0;
-            right: -30px;
-            color: #ea4335;
+        .tagline {
+            font-size: 1.2em;
+            color: #666;
+            margin-top: 10px;
+            font-weight: 400;
+            letter-spacing: 0.5px;
         }
 
         .search-container {
-            margin-top: 20px;
-            text-align: center;
+            margin: 20px auto;
             width: 100%;
-            max-width: 584px;
+            max-width: 700px;
+            position: relative;
         }
 
         .search-box {
             width: 100%;
-            padding: 12px 20px;
-            margin: 8px 0;
-            border: 1px solid #dfe1e5;
-            border-radius: 24px;
-            font-size: 16px;
-            outline: none;
+            padding: 20px 30px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            font-size: 18px;
+            color: #ffffff;
+            backdrop-filter: blur(10px);
             transition: all 0.3s ease;
         }
 
-        .search-box:hover, .search-box:focus {
-            box-shadow: 0 1px 6px rgba(32,33,36,.28);
-            border-color: rgba(223,225,229,0);
+        .search-box:focus {
+            outline: none;
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 0 30px rgba(255, 255, 255, 0.05);
+        }
+
+        .search-box::placeholder {
+            color: rgba(255, 255, 255, 0.3);
         }
 
         .search-button {
-            background-color: #4285f4;
-            border: none;
-            border-radius: 4px;
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: linear-gradient(135deg, #5851DB, #833AB4);
             color: white;
-            font-size: 14px;
-            margin: 11px 4px;
-            padding: 0 16px;
-            height: 36px;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 500;
             cursor: pointer;
             transition: all 0.3s ease;
         }
 
         .search-button:hover {
-            background-color: #357abd;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
-        }
-
-        .results-container {
-            margin-top: 20px;
-            width: 100%;
-            max-width: 684px;
-        }
-
-        .result-item {
-            margin: 20px 0;
-            padding: 15px;
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            transition: all 0.3s ease;
-        }
-
-        .result-item:hover {
-            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
-            transform: translateY(-2px);
+            transform: translateY(-50%) scale(1.02);
+            box-shadow: 0 0 20px rgba(88, 81, 219, 0.3);
         }
 
         .loading {
             display: none;
-            margin-top: 20px;
-            color: #4285f4;
-            font-weight: bold;
+            margin: 30px 0;
+            font-size: 18px;
+            color: rgba(255, 255, 255, 0.6);
+            text-align: center;
         }
 
         .loading.active {
             display: block;
+            animation: pulse 1.5s infinite;
         }
 
-        @media (max-width: 600px) {
-            .logo {
-                font-size: 2.5em;
+        @keyframes pulse {
+            0% { opacity: 0.6; }
+            50% { opacity: 1; }
+            100% { opacity: 0.6; }
+        }
+
+        .results-container {
+            width: 100%;
+            max-width: 800px;
+            margin: 40px auto;
+        }
+
+        .result-item {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 20px;
+            backdrop-filter: blur(10px);
+            transform: translateY(0);
+            transition: all 0.3s ease;
+        }
+
+        .result-item:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .result-item h3 {
+            color: #ffffff;
+            font-size: 1.4em;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .result-item p {
+            color: rgba(255, 255, 255, 0.6);
+            line-height: 1.6;
+            font-size: 1em;
+        }
+
+        /* Premium Label */
+        .premium-label {
+            position: absolute;
+            top: -40px;
+            right: 0;
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-size: 0.9em;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        /* Animated Background */
+        .background-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.1;
+            background: 
+                radial-gradient(circle at 20% 20%, rgba(88, 81, 219, 0.2) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(131, 58, 180, 0.2) 0%, transparent 50%);
+            filter: blur(100px);
+            animation: backgroundMove 20s ease infinite;
+        }
+
+        @keyframes backgroundMove {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .logo { font-size: 3em; }
+            .search-box { padding: 15px 20px; }
+            .search-button { padding: 10px 20px; }
+            .result-item { padding: 20px; }
+        }
+
+        @media (max-width: 480px) {
+            .logo { font-size: 2.5em; }
+            .tagline { font-size: 1em; }
+            .search-button {
+                position: relative;
+                right: auto;
+                top: auto;
+                transform: none;
+                width: 100%;
+                margin-top: 15px;
             }
-            
-            .logo::after {
-                right: -20px;
-            }
-        }
-
-        /* Subtle animation for the logo */
-        @keyframes float {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-5px); }
-            100% { transform: translateY(0px); }
-        }
-
-        .logo {
-            animation: float 3s ease-in-out infinite;
         }
     </style>
 </head>
 <body>
-    <div class="search-container">
-        <div class="logo">
-            <span class="coders">Coder's</span><span class="buddy">Buddy</span>
+    <div class="background-animation"></div>
+    <div class="container">
+        <div class="logo-container">
+            <div class="logo">Coder'sBuddy</div>
+            <div class="tagline">Elevate Your Code. Premium Solutions.</div>
         </div>
-        <form id="searchForm">
-            <input type="text" class="search-box" id="searchInput" placeholder="Search for code, tutorials, solutions...">
-            <div>
-                <button type="submit" class="search-button">Search</button>
-            </div>
-        </form>
-    </div>
+        
+        <div class="search-container">
+            <span class="premium-label">PREMIUM</span>
+            <form id="searchForm">
+                <input type="text" class="search-box" id="searchInput" placeholder="Search for elite coding solutions...">
+                <button type="submit" class="search-button">Discover</button>
+            </form>
+        </div>
 
-    <div class="loading" id="loading">Searching for the best results...</div>
-    <div class="results-container" id="resultsContainer"></div>
+        <div class="loading" id="loading">Curating premium results for you...</div>
+        <div class="results-container" id="resultsContainer"></div>
+    </div>
 
     <script>
         document.getElementById('searchForm').addEventListener('submit', async (e) => {
@@ -181,23 +262,36 @@
 
                 const data = await response.json();
 
-                if (data.data && data.data.length > 0) {
-                    data.data.forEach(result => {
-                        const resultElement = document.createElement('div');
-                        resultElement.className = 'result-item';
-                        resultElement.innerHTML = `
-                            <h3>${result.title || 'No Title'}</h3>
-                            <p>${result.description || 'No Description'}</p>
+                setTimeout(() => {
+                    if (data.results && data.results.length > 0) {
+                        data.results.forEach(result => {
+                            const resultElement = document.createElement('div');
+                            resultElement.className = 'result-item';
+                            resultElement.innerHTML = `
+                                <h3>${result.title || 'Premium Solution'}</h3>
+                                <p>${result.description || 'Exclusive coding solution crafted for premium members.'}</p>
+                            `;
+                            resultsContainer.appendChild(resultElement);
+                        });
+                    } else {
+                        resultsContainer.innerHTML = `
+                            <div class="result-item">
+                                <h3>No Results Found</h3>
+                                <p>Try refining your search or explore our premium collections.</p>
+                            </div>
                         `;
-                        resultsContainer.appendChild(resultElement);
-                    });
-                } else {
-                    resultsContainer.innerHTML = '<div class="result-item">No results found. Try different keywords!</div>';
-                }
+                    }
+                    loadingEl.classList.remove('active');
+                }, 800); // Added slight delay for smooth loading effect
+
             } catch (error) {
-                resultsContainer.innerHTML = '<div class="result-item">An error occurred while searching. Please try again!</div>';
+                resultsContainer.innerHTML = `
+                    <div class="result-item">
+                        <h3>Service Temporarily Unavailable</h3>
+                        <p>Our premium service is being upgraded. Please try again shortly.</p>
+                    </div>
+                `;
                 console.error('Search error:', error);
-            } finally {
                 loadingEl.classList.remove('active');
             }
         });
