@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coder'sBuddy</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            background-color: #f8f9fa;
+        }
+
+        .logo {
+            font-size: 3.5em;
+            margin-bottom: 20px;
+            font-weight: bold;
+            text-align: center;
+            line-height: 1.2;
+            position: relative;
+        }
+
+        .logo span.coders {
+            background: linear-gradient(45deg, #4285f4, #34a853, #fbbc05, #ea4335);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            display: inline-block;
+        }
+
+        .logo span.buddy {
+            color: #4285f4;
+            font-style: italic;
+        }
+
+        .logo::after {
+            content: "{ }";
+            position: absolute;
+            font-size: 0.4em;
+            top: 0;
+            right: -30px;
+            color: #ea4335;
+        }
+
+        .search-container {
+            margin-top: 20px;
+            text-align: center;
+            width: 100%;
+            max-width: 584px;
+        }
+
+        .search-box {
+            width: 100%;
+            padding: 12px 20px;
+            margin: 8px 0;
+            border: 1px solid #dfe1e5;
+            border-radius: 24px;
+            font-size: 16px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .search-box:hover, .search-box:focus {
+            box-shadow: 0 1px 6px rgba(32,33,36,.28);
+            border-color: rgba(223,225,229,0);
+        }
+
+        .search-button {
+            background-color: #4285f4;
+            border: none;
+            border-radius: 4px;
+            color: white;
+            font-size: 14px;
+            margin: 11px 4px;
+            padding: 0 16px;
+            height: 36px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .search-button:hover {
+            background-color: #357abd;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+        }
+
+        .results-container {
+            margin-top: 20px;
+            width: 100%;
+            max-width: 684px;
+        }
+
+        .result-item {
+            margin: 20px 0;
+            padding: 15px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .result-item:hover {
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+            transform: translateY(-2px);
+        }
+
+        .loading {
+            display: none;
+            margin-top: 20px;
+            color: #4285f4;
+            font-weight: bold;
+        }
+
+        .loading.active {
+            display: block;
+        }
+
+        @media (max-width: 600px) {
+            .logo {
+                font-size: 2.5em;
+            }
+            
+            .logo::after {
+                right: -20px;
+            }
+        }
+
+        /* Subtle animation for the logo */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-5px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .logo {
+            animation: float 3s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body>
+    <div class="search-container">
+        <div class="logo">
+            <span class="coders">Coder's</span><span class="buddy">Buddy</span>
+        </div>
+        <form id="searchForm">
+            <input type="text" class="search-box" id="searchInput" placeholder="Search for code, tutorials, solutions...">
+            <div>
+                <button type="submit" class="search-button">Search</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="loading" id="loading">Searching for the best results...</div>
+    <div class="results-container" id="resultsContainer"></div>
+
+    <script>
+        document.getElementById('searchForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const searchTerm = document.getElementById('searchInput').value;
+            const loadingEl = document.getElementById('loading');
+            const resultsContainer = document.getElementById('resultsContainer');
+            
+            if (!searchTerm.trim()) return;
+
+            loadingEl.classList.add('active');
+            resultsContainer.innerHTML = '';
+
+            try {
+                const response = await fetch('/search', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ query: searchTerm })
+                });
+
+                const data = await response.json();
+
+                if (data.data && data.data.length > 0) {
+                    data.data.forEach(result => {
+                        const resultElement = document.createElement('div');
+                        resultElement.className = 'result-item';
+                        resultElement.innerHTML = `
+                            <h3>${result.title || 'No Title'}</h3>
+                            <p>${result.description || 'No Description'}</p>
+                        `;
+                        resultsContainer.appendChild(resultElement);
+                    });
+                } else {
+                    resultsContainer.innerHTML = '<div class="result-item">No results found. Try different keywords!</div>';
+                }
+            } catch (error) {
+                resultsContainer.innerHTML = '<div class="result-item">An error occurred while searching. Please try again!</div>';
+                console.error('Search error:', error);
+            } finally {
+                loadingEl.classList.remove('active');
+            }
+        });
+    </script>
+</body>
+</html>

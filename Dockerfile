@@ -22,5 +22,9 @@ COPY . .
 # Expose the ports for Node.js and Ollama (adjust if needed)
 EXPOSE 3000 8080
 
+# Add a script to start both Ollama and the Node.js app
+COPY start.sh /start.sh
+RUN chmod +x /start.sh
+
 # Command to run both services (Ollama and Node.js)
-CMD [ "sh", "-c", "ollama start & node app.js" ]
+CMD ["/start.sh"]
