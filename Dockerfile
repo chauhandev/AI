@@ -7,7 +7,7 @@ RUN apt-get update && apt-get install -y \
     python3 \
     python3-pip \
     && rm -rf /var/lib/apt/lists/*
-
+do
 # Install Ollama (adjust the following command as per Ollama's installation method)
 RUN curl -sSL https://ollama.ai/install.sh | bash
 

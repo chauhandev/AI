@@ -21,16 +21,17 @@ app.get("/search", async (req, res) => {
     });
 
     // Parse and format the response for better readability
+    console.log(rawData); 
     const rawData = response.data;
-    const parsedData = rawData.split("\n").map((entry) => {
-      const jsonEntry = JSON.parse(entry);
-      if (jsonEntry.done) {
-        return jsonEntry.response.trim();
-      }
-      return jsonEntry.response.trim();
-    }).join(" ");
+    // const parsedData = rawData.split("\n").map((entry) => {
+    //   const jsonEntry = JSON.parse(entry);
+    //   if (jsonEntry.done) {
+    //     return jsonEntry.response.trim();
+    //   }
+    //   return jsonEntry.response.trim();
+    // }).join(" ");
 
-    res.json({ results: parsedData });
+    res.json({ results: rawData });
   } catch (error) {
     console.error("Error interacting with Ollama:", error.message);
     
