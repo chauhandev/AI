@@ -1,30 +1,13 @@
-# Base image for Node.js
-FROM node:18
+FROM ubuntu:20.04
 
-# Install dependencies for Ollama (assuming Ubuntu-based installation works)
 RUN apt-get update && apt-get install -y \
     curl \
+    build-essential \
     python3 \
-    python3-pip \
-    && rm -rf /var/lib/apt/lists/*
-do
-# Install Ollama (adjust the following command as per Ollama's installation method)
+    python3-pip
 RUN curl -sSL https://ollama.ai/install.sh | bash
 
-# Set working directory for the Node.js app
-WORKDIR /usr/src/app
+EXPOSE 8080
 
-# Copy Node.js application files
-COPY package*.json ./
-RUN npm install
-COPY . .
-
-# Expose the ports for Node.js and Ollama (adjust if needed)
-EXPOSE 3000 8080
-
-# Add a script to start both Ollama and the Node.js app
-COPY start.sh /start.sh
-RUN chmod +x /start.sh
-
-# Command to run both services (Ollama and Node.js)
-CMD ["/start.sh"]
+# Run both the server and the model command
+CMD ["sh", "-c", "ollama start & sleep 5 && ollama run qwen2.5-coder:1.5b"]
