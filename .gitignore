@@ -1,0 +1,33 @@
+# Node.js dependencies
+/node_modules/
+
+# Logs
+*.log
+logs/
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Environment variables
+.env
+
+# npm debug files
+npm-debug.log*
+
+# Yarn lock file (if using Yarn)
+yarn.lock
+
+# IDEs and text editors
+.vscode/
+.idea/
+
+# Coverage output (from testing frameworks like Mocha, Jest, etc.)
+coverage/
+
+# Build output (e.g., dist or build directories)
+dist/
+build/
+
+# Temporary files
+*.swp
