@@ -34,4 +34,4 @@ COPY . .
 EXPOSE 11434 3000
 
 # Start Ollama server and Node.js API
-CMD ["sh", "-c", "ollama start & ollama run deepseek-r1:1.5b & node runLlama.js"]
+CMD ["sh", "-c", "ollama start & ollama run deepseek-r1:1.5b & node index.js"]
