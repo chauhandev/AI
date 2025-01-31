@@ -24,9 +24,7 @@ COPY . .
 # Expose necessary ports
 EXPOSE 3000 11434
 
-# Start Ollama, install the model, then run the Node.js app
-CMD ollama serve & \
-    sleep 5 && \
-    ollama run deepseek-r1:1.5b && \
-    node index.js
+# Start Ollama, install the model, then run the Node.js app (using JSON array syntax)
+CMD ["sh", "-c", "ollama serve & sleep 5 && ollama run deepseek-r1:1.5b  && sleep 5 && node index.js"]
 
+    

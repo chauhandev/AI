@@ -18,8 +18,7 @@ app.post('/query', async (req, res) => {
         prompt,
         stream:false
       });
-  
-      res.json({ response: response.data });
+        res.json({ response: response.data.response.response });
     } catch (error) {
       console.error('Error querying Ollama:', error.message);
       res.status(500).json({ error: 'Failed to query the model' });
