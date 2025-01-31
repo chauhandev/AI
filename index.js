@@ -2,6 +2,7 @@ import express from 'express';
 import axios from 'axios';
 const app = express();
 app.use(express.json());
+const OLLAMA_URL = 'http://localhost:11434/api/generate'; // Ollama API
 
 app.post('/query', async (req, res) => {
     console.log("request")
@@ -12,9 +13,10 @@ app.post('/query', async (req, res) => {
     console.log("prompt" ,prompt)
 
     try {
-      const response = await axios.post('http://localhost:11434/api/v1/completions', {
-        model: 'deepseek-r1:1.5b', // Specify the model here
+      const response = await axios.post(OLLAMA_URL, {
+        model: 'deepseek-r1:1.5b',
         prompt,
+        stream:false
       });
   
       res.json({ response: response.data });
